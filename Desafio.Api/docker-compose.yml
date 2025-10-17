@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: development
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: desafio
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  api:
+    build:
+      context: .
+      dockerfile: Desafio.Api/Dockerfile
+      args:
+        APP_UID: 1000
+    depends_on:
+      - db
+    environment:
+      # Ajuste a connection string conforme necessário
+      ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Database=desafio;Username=development;Password=1234"
+      UrlApi: "http://api:8080"
+      ASPNETCORE_ENVIRONMENT: "Development"
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    restart: unless-stopped
+
+volumes:
+  pgdata:
