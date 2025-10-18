@@ -19,8 +19,13 @@ COPY ["Desafio.Api/Desafio.Api.csproj", "Desafio.Api/"]
 COPY ["Desafio.Infrastructure/Desafio.Infrastructure.csproj", "Desafio.Infrastructure/"]
 COPY ["Desafio.Application/Desafio.Application.csproj", "Desafio.Application/"]
 COPY ["Desafio.Domain/Desafio.Domain.csproj", "Desafio.Domain/"]
+COPY ["Desafio.Tests/Desafio.Tests.csproj", "Desafio.Tests/"]
 
 RUN dotnet restore "Desafio.Api/Desafio.Api.csproj"
+RUN dotnet restore "Desafio.Infrastructure/Desafio.Infrastructure.csproj"
+RUN dotnet restore "Desafio.Application/Desafio.Application.csproj"
+RUN dotnet restore "Desafio.Domain/Desafio.Domain.csproj"
+RUN dotnet restore "Desafio.Tests/Desafio.Tests.csproj"
 
 # Copia o resto do código
 COPY . .
@@ -28,7 +33,7 @@ WORKDIR "/src/Desafio.Api"
 RUN dotnet build "./Desafio.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
+ARG BUILD_CONFIGURATION=Development
 RUN dotnet publish "./Desafio.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final

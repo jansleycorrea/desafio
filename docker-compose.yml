@@ -15,20 +15,21 @@ services:
   api:
     build:
       context: .
-      dockerfile: Desafio.Api/Dockerfile
+      dockerfile: Dockerfile
       args:
         APP_UID: 1000
     depends_on:
       - db
     environment:
-      # Ajuste a connection string conforme necessário
+    # Ajuste a connection string conforme necessario
       ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Database=desafio;Username=development;Password=1234"
       UrlApi: "http://api:8080"
       ASPNETCORE_ENVIRONMENT: "Development"
     ports:
       - "8080:8080"
       - "8081:8081"
-    restart: unless-stopped
+    tty: true
+    stdin_open: true
 
 volumes:
   pgdata:
