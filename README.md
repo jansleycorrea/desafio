@@ -30,8 +30,8 @@ Os *seeds* do projeto criam um usuário administrador padrão. Para obter um tok
 
 ```json
 {
-  "username": "usuario@admin.com",
-  "password": "Password@123"
+  "username": "admin",
+  "password": "Admin@123"
 }
 ```
 
