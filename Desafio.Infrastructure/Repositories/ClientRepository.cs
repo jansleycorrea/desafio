@@ -26,7 +26,7 @@ namespace Desafio.Infrastructure.Repositories
 
         public async Task<bool> DeleteAsync(string? id)
         {
-            var client = await _clientContext.Client.FindAsync(id);
+            var client = await _clientContext.Client.FindAsync(Guid.Parse(id));
             if (client == null) return false;
             _clientContext.Remove(client);
             return await _clientContext.SaveChangesAsync() > 0;
@@ -34,7 +34,7 @@ namespace Desafio.Infrastructure.Repositories
 
         public async Task<Client?> GetByIdAsync(string? id)
         {
-            return await _clientContext.Client.FindAsync(id);
+            return await _clientContext.Client.FindAsync(Guid.Parse(id));
         }
 
         public async Task<IEnumerable<Client>> GetClientsAsync(int skip = 0, int take = 25)
@@ -55,7 +55,7 @@ namespace Desafio.Infrastructure.Repositories
         }
         public async Task<bool> EmailExists(string email)
         {
-            var client = await _clientContext.Client.Where(c => c.Email == email).FirstAsync();
+            var client = await _clientContext.Client.Where(c => c.Email == email).FirstOrDefaultAsync();
             return client != null;
         }
     }

@@ -11,7 +11,7 @@ namespace Desafio.Infrastructure.EntitiesConfiguration
         {
             builder.Property(x => x.Id);
             builder.Property(p => p.Title).HasMaxLength(256).IsRequired();
-            builder.Property(p => p.Description).HasMaxLength(256).IsRequired();
+            builder.Property(p => p.Description).HasColumnType("TEXT").IsRequired();
             builder.Property(p => p.Category).HasMaxLength(256).IsRequired();
             builder.Property(p => p.Image).HasMaxLength(256).IsRequired();
 

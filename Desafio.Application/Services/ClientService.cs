@@ -47,7 +47,7 @@ namespace Desafio.Application.Services
 
         public async Task<bool> DeleteAsync(string? id)
         {
-            throw new NotImplementedException();
+            return await _clientRepository.DeleteAsync(id);
         }
 
         public async Task<IEnumerable<ClientDTO>> GetClientsAsync(int take, int skip)
@@ -77,7 +77,35 @@ namespace Desafio.Application.Services
 
         public async Task<ClientDTO> UpdateAsync(ClientDTO client)
         {
-            throw new NotImplementedException();
+            if (client.Id == null)
+                throw new Exception("Id do cliente é obrigatório");
+            var clientEntity = await _clientRepository.GetByIdAsync(client.Id);
+
+            if (client.Email != clientEntity.Email && await _clientRepository.EmailExists(client.Email))
+                throw new Exception("Email já cadastrado");
+            clientEntity.Update(
+                client.Name,
+                client.Email,
+                client.Phone,
+                client.Cpf,
+                client.Cep,
+                client.Address,
+                client.AddressNumber
+            );
+
+            clientEntity =  await _clientRepository.UpdateAsync(clientEntity);
+
+            return new ClientDTO
+            {
+                Id = clientEntity.Id.ToString(),
+                Name = clientEntity.Name,
+                Email = clientEntity.Email,
+                Phone = clientEntity.Phone,
+                Cpf = clientEntity.Cpf,
+                Cep = clientEntity.Cep,
+                Address = clientEntity.Address,
+                AddressNumber = clientEntity.AddressNumber
+            };
         }
     }
 }

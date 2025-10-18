@@ -4,6 +4,7 @@ using Desafio.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Desafio.Infrastructure.Repositories
 {
@@ -34,7 +35,7 @@ namespace Desafio.Infrastructure.Repositories
         {
             if (clientId == null)
                 return new List<FavoriteList>();
-            return await _favoriteListContext.FavoriteList.Where(f => f.ClientId == Guid.Parse(clientId)).ToListAsync();
+            return await _favoriteListContext.FavoriteList.Include(f => f.Products).Where(f => f.ClientId == Guid.Parse(clientId)).ToListAsync();
         }
 
         public async Task<FavoriteList?> GetByIdAsync(string? id)

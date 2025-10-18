@@ -32,9 +32,16 @@ namespace Desafio.Application.Services
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<FavoriteListDTO>> GetListByClientAsync(string? clientId)
+        public async Task<IEnumerable<FavoriteListDTO>> GetListByClientAsync(string? clientId)
         {
-            throw new NotImplementedException();
+            var favoriteList = await _favoriteListRepository.GetListByClientAsync(clientId);
+            return favoriteList.Select(f => new FavoriteListDTO
+                {
+                    Id = f.Id.ToString(),
+                    Name = f.Name,
+                    ClientId = f.ClientId,
+                    Products = f.Products.Select(p => new ProductDTO { Title = p.Title, Description = p.Description})
+                });
         }
 
         public Task<FavoriteListDTO> UpdateAsync(FavoriteListDTO favoriteList)

@@ -32,19 +32,53 @@ namespace Desafio.Application.Services
             };
         }
 
-        public Task<ProductDTO> GetByIdAsync(int id)
+        public async Task<ProductDTO> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var product = await _productRepository.GetByIdAsync(id);
+            if (product == null)
+                throw new Exception("Produto não encontrado");
+            return new ProductDTO
+            {
+                Id = product.Id,
+                Title = product.Title,
+                Description = product.Description,
+                Category = product.Category,
+                Image = product.Image,
+                Price = product.Price
+            };
         }
 
-        public Task<IEnumerable<ProductDTO>> GetProductsAsync()
+        public async Task<IEnumerable<ProductDTO>> GetProductsAsync()
         {
-            throw new NotImplementedException();
+            var products = await _productRepository.GetProductsAsync();
+            return products.Select(product => new ProductDTO
+            {
+                Id = product.Id,
+                Title = product.Title,
+                Description = product.Description,
+                Category = product.Category,
+                Image = product.Image,
+                Price = product.Price
+            });
         }
 
-        public Task<IEnumerable<ProductDTO>> GetProductsByListAsync(string listId)
+        public async Task<IEnumerable<ProductDTO>> GetProductsByListAsync(string listId)
         {
-            throw new NotImplementedException();
+            var products = await _productRepository.GetProductsByListAsync(listId);
+            return products.Select(product => new ProductDTO
+            {
+                Id = product.Id,
+                Title = product.Title,
+                Description = product.Description,
+                Category = product.Category,
+                Image = product.Image,
+                Price = product.Price
+            });
+        }
+
+        public async Task<bool> DeleteAsync(int productId, string listId)
+        {
+            return await _productRepository.DeleteAsync(productId, listId);
         }
     }
 }

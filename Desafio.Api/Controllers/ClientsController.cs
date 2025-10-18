@@ -43,7 +43,37 @@ namespace Desafio.Api.Controllers
                 if (client == null) return BadRequest("Falha ao cadastrar o usuário");
                 return Ok(client);
             }
-            catch(Exception ex)
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut]
+        public async Task<ActionResult<ClientDTO>> Put([FromBody] ClientDTO clientDto)
+        {
+            try
+            {
+                var client = await _clientService.UpdateAsync(clientDto);
+                if (client == null) return BadRequest("Falha ao atualizar o usuário");
+                return Ok(client);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete(string id)
+        {
+            try
+            {
+                var result = await _clientService.DeleteAsync(id);
+                if (!result) return BadRequest("Falha ao deletar o usuário");
+                return Ok("Usuário deletado com sucesso");
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }

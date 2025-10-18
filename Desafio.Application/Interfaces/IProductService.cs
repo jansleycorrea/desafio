@@ -13,5 +13,6 @@ namespace Desafio.Application.Interfaces
         Task<ProductDTO> GetByIdAsync(int id);
         Task<ProductDTO> AddProductToList(int productId, string favoriteList);
         Task<IEnumerable<ProductDTO>> GetProductsByListAsync(string listId);
+        Task<bool> DeleteAsync(int productId, string listId);
     }
 }

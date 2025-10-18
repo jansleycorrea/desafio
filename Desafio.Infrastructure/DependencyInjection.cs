@@ -54,9 +54,10 @@ namespace Desafio.Infrastructure
 
             services.AddScoped<IClientService, ClientService>();
             services.AddScoped<IFavoriteListService, FavoriteListService>();
+            services.AddScoped<IProductService, ProductService>();
 
             services.AddScoped<IAuthenticate, AuthenticateService>();
-            services.AddTransient<ISeedUserRoleInitial, SeedUserRoleInitial>();
+            services.AddScoped<ISeedUserRoleInitial, SeedUserRoleInitial>();
 
             return services;
         }

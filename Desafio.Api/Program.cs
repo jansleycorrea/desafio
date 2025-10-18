@@ -1,7 +1,9 @@
 using Desafio.Domain.Account;
 using Desafio.Infrastructure;
+using Desafio.Infrastructure.Context;
 using Desafio.Infrastructure.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -92,6 +94,10 @@ void SeedUserRoles(IApplicationBuilder app)
 {
     using (var serviceScope = app.ApplicationServices.CreateScope())
     {
+        var services = serviceScope.ServiceProvider;
+        var context = services.GetRequiredService<ApplicationDbContext>();
+
+        context.Database.Migrate();
         var seed = serviceScope.ServiceProvider
                                .GetService<ISeedUserRoleInitial>();
         seed.SeedRolesAsync();

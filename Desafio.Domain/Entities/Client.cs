@@ -35,6 +35,18 @@ namespace Desafio.Domain.Entities
             FavoriteLists.Add(new FavoriteList("Lista de desejos"));
         }
 
+        public void Update(string name, string email, string phone, string cpf, string cep, string address, string addressNumber)
+        {
+            Validate(name, email, phone, cpf, cep, address, addressNumber);
+            Name = name;
+            Email = email;
+            Cpf = cpf;
+            Phone = phone;
+            Cep = cep;
+            Address = address;
+            AddressNumber = addressNumber;
+        }
+
         private void Validate(string name, string email, string phone, string cpf, string cep, string address, string addressNumber)
         {
             if (cpf.Length != 11)

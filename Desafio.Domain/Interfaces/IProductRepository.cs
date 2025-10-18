@@ -13,8 +13,9 @@ namespace Desafio.Domain.Interfaces
         Task<Product?> GetByIdAsync(int? id);
         Task<Product> CreateAsync(Product product);
         Task<Product> UpdateAsync(Product product);
-        Task<bool> DeleteAsync(int? id);
+        Task<bool> DeleteAsync(int productId, string listId);
         Task<Product> AddProductToList(int productId, string listId);
         Task<bool> ProductExistsInListAsync(int productId, string listId);
+        Task<IEnumerable<Product>> GetProductsAsync();
     }
 }

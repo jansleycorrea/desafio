@@ -25,12 +25,12 @@ namespace Desafio.Tests.Domain
             Assert.IsType<Client>(client);
         }
 
-        [Fact(DisplayName = "Teste de cadastro com lista de favoritos nula")]
-        public void CreateClient_FavoriteListIsNull_ShouldThrowException()
+        [Fact(DisplayName = "Teste de cadastro com e-mail inválido")]
+        public void CreateClient_EmailInvalid_ShouldThrowException()
         {
             // Arrange
             var name = "John Doe";
-            var email = "jansley@email.com";
+            var email = "jansleyemail.com";
             var phone = "1234567890";
             var address = "123 Main";
             var cpf = "12345678901";

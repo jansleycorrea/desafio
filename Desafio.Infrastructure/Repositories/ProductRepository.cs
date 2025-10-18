@@ -10,7 +10,7 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
-using static System.Net.WebRequestMethods;
+using Microsoft.Extensions.Http;
 
 namespace Desafio.Infrastructure.Repositories
 {
@@ -29,9 +29,13 @@ namespace Desafio.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task<bool> DeleteAsync(int? id)
+        public async Task<bool> DeleteAsync(int productId, string listId)
         {
-            throw new NotImplementedException();
+            var product = await _contextProduct.Product.FindAsync(productId, Guid.Parse(listId));
+            if (product == null) return false;
+            _contextProduct.Remove(product);
+
+            return await _contextProduct.SaveChangesAsync() > 0;
         }
 
         public async Task<Product?> GetByIdAsync(int? id)
@@ -43,7 +47,7 @@ namespace Desafio.Infrastructure.Repositories
             if (product == null) return null;
             return product;
         }
-        public async Task<IEnumerable<Product>> GetProductsAsync(string listId)
+        public async Task<IEnumerable<Product>> GetProductsAsync()
         {
             var response = await _httpClient.GetAsync("/products");
             response.EnsureSuccessStatusCode();
@@ -66,28 +70,34 @@ namespace Desafio.Infrastructure.Repositories
         public async Task<bool> ProductExistsInListAsync(int productId, string listId)
         {
             var product = await _contextProduct.Product
-                .Where(p => p.Id == productId && p.FavoriteListId.ToString() == listId).FirstAsync();
+                .Where(p => p.Id == productId && p.FavoriteListId.ToString() == listId).FirstOrDefaultAsync();
             return product != null;
         }
 
         public async Task<Product> AddProductToList(int productId, string listId)
         {
-            var url = $"/products/{productId}";
-            var response = await _httpClient.GetAsync(url);
-            response.EnsureSuccessStatusCode();
-            var product = await response.Content.ReadFromJsonAsync<Product>();
+            try
+            {
+                var url = $"/products/{productId}";
+                var response = await _httpClient.GetAsync(url);
+                response.EnsureSuccessStatusCode();
+                var product = await response.Content.ReadFromJsonAsync<Product>();
 
-            var productEntity = _contextProduct.Add(new Product
-            (
-                productId,
-                product.Description,
-                product.Title,
-                product.Category,
-                product.Image,
-                Guid.Parse(listId)
-            ));
-            await _contextProduct.SaveChangesAsync();
-            return productEntity.Entity;
+                var productEntity = _contextProduct.Add(new Product
+                (
+                    productId,
+                    product.Title,
+                    product.Description,
+                    product.Category,
+                    product.Image,
+                    Guid.Parse(listId)
+                ));
+                await _contextProduct.SaveChangesAsync();
+                return productEntity.Entity;
+            }catch(Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }
